@@ -1,0 +1,8 @@
+qq-botpy
+pyyaml
+openai
+httpx
+requests
+beautifulsoup4
+aiofiles
+aiohttp
