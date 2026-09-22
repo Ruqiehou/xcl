@@ -180,6 +180,7 @@ class SignInSystem:
                     self._save_user(target, tdata)
                     self._save_user(user_id, data)
                     return f"随机选择了{target}，积分已清零，你的剩余：{data['points']}"
+            data['points'] += item["price"]
             self._save_user(user_id, data)
             return "兑换失败，暂无其他玩家，积分已退还"
         return None
