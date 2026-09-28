@@ -26,3 +26,4 @@
 2026-09-28 23:01:16,090	[INFO]	(gateway.py:223)_send_heart	[botpy] 心跳维持启动...
 2026-09-28 23:01:49,508	[ERROR]	(gateway.py:97)on_message	_parser unknown event group_message_create.
 2026-09-28 23:02:34,949	[ERROR]	(gateway.py:97)on_message	_parser unknown event group_message_create.
+2026-09-28 23:04:51,451	[ERROR]	(gateway.py:97)on_message	_parser unknown event group_message_create.
