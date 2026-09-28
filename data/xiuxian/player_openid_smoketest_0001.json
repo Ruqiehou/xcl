@@ -1,0 +1,33 @@
+{
+  "username": "测试道友",
+  "player_id": "openid_smoketest_0001",
+  "realm_index": 163,
+  "exp": 46983,
+  "last_meditate": "",
+  "total_exp_gained": 85598,
+  "total_breakthroughs": 163,
+  "items": [
+    {
+      "name": "聚气丹",
+      "type": "pill",
+      "grade": "凡品",
+      "bonus": 50,
+      "count": 1
+    },
+    {
+      "name": "黄品玉佩",
+      "type": "artifact",
+      "grade": "黄品",
+      "bonus": 5,
+      "count": 1
+    }
+  ],
+  "is_soul_opened": true,
+  "is_ascended": false,
+  "ascension_count": 0,
+  "equipped": {
+    "weapon": null,
+    "armor": null,
+    "artifact": null
+  }
+}

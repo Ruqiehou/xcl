@@ -10,9 +10,10 @@ QNA_DIR = os.path.join(DATA_DIR, "qn")
 SIGNIN_DIR = os.path.join(DATA_DIR, "signin")
 SPEECH_DIR = os.path.join(DATA_DIR, "speech")
 SUMMARY_DATA_DIR = os.path.join(DATA_DIR, "summary")
+DIARY_DIR = os.path.join(DATA_DIR, "diary")
 DICTIONARY_PATH = os.path.join(DATA_DIR, "csmsword.json")
 
-for _d in (DATA_DIR, QNA_DIR, SIGNIN_DIR, SPEECH_DIR, SUMMARY_DATA_DIR):
+for _d in (DATA_DIR, QNA_DIR, SIGNIN_DIR, SPEECH_DIR, SUMMARY_DATA_DIR, DIARY_DIR):
     os.makedirs(_d, exist_ok=True)
 
 # 管理员 openid 列表（问答管理命令使用）
