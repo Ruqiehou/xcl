@@ -11,6 +11,7 @@ import random
 
 import botpy
 from botpy import logging
+from botpy.connection import ConnectionState
 from botpy.message import GroupMessage, C2CMessage
 
 from modules.config import DICTIONARY_PATH, ADMIN_IDS, MENTION_PATTERN
@@ -22,6 +23,14 @@ from modules.tools import ToolCommands
 
 logging.bot_log = True
 logger = logging.get_logger(__name__)
+
+# qq-botpy 1.2.1 未内置「群全量消息（免@）」事件解析，这里补上。
+# 平台需在群设置中允许机器人接收全部消息，事件才会推送（Intent 同为 1<<25）。
+def _parse_group_message_create(self, payload):
+    _message = GroupMessage(self.api, payload.get("id", None), payload.get("d", {}))
+    self._dispatch("group_message_create", _message)
+
+ConnectionState.parse_group_message_create = _parse_group_message_create
 
 
 # ---------------------------------------------------------------------------
@@ -93,6 +102,13 @@ class MyClient(botpy.Client):
 
     # ---------------- 群消息 ----------------
     async def on_group_at_message_create(self, message: GroupMessage):
+        await self._handle_group(message)
+
+    async def on_group_message_create(self, message: GroupMessage):
+        """群全量消息（免@）"""
+        await self._handle_group(message)
+
+    async def _handle_group(self, message: GroupMessage):
         content = message.content or ""
         text = self._strip_mention(content)
         if not text:
@@ -162,7 +178,7 @@ class MyClient(botpy.Client):
         if answer:
             return answer
 
-        return "未知指令，发送「帮助」查看可用功能。"
+        return None  # 未知指令保持静默
 
     # ---------------- 内置指令 ----------------
     def _built_in(self, text):
