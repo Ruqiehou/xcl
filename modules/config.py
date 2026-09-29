@@ -13,12 +13,37 @@ SPEECH_DIR = os.path.join(DATA_DIR, "speech")
 SUMMARY_DATA_DIR = os.path.join(DATA_DIR, "summary")
 DIARY_DIR = os.path.join(DATA_DIR, "diary")
 DICTIONARY_PATH = os.path.join(DATA_DIR, "csmsword.json")
+ADMIN_IDS_PATH = os.path.join(DATA_DIR, "admins.json")
 
 for _d in (DATA_DIR, QNA_DIR, SIGNIN_DIR, SPEECH_DIR, SUMMARY_DATA_DIR, DIARY_DIR):
     os.makedirs(_d, exist_ok=True)
 
-# 管理员 openid 列表（问答管理命令使用）
-ADMIN_IDS: set = set()
+
+def _load_admin_ids(path):
+    """从 data/admins.json 读取管理员 openid 列表。
+
+    文件格式为字符串数组，例如：["openid_xxx", "openid_yyy"]
+    文件不存在时自动创建空模板；解析失败时返回空集合。
+    """
+    if not os.path.exists(path):
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump([], f, ensure_ascii=False, indent=4)
+        except Exception:
+            pass
+        return set()
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return {str(x) for x in data if x}
+    except Exception:
+        pass
+    return set()
+
+
+# 管理员 openid 集合（问答管理命令使用），来源：data/admins.json
+ADMIN_IDS: set = _load_admin_ids(ADMIN_IDS_PATH)
 
 # botpy 消息中 @ 机器人的文本形式
 MENTION_PATTERN = re.compile(r"<@![0-9a-zA-Z_\-]+>")
