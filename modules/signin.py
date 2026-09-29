@@ -12,6 +12,10 @@ from .config import SIGNIN_DIR
 class SignInSystem:
     """签到积分管理器"""
 
+    EXACT_COMMANDS = ("签到", "签到帮助", "我的积分", "我的信息", "积分排行",
+                      "积分商城", "登记发言", "发言排行")
+    PREFIX_COMMANDS = ("兑换", "设置名字", "查发言")
+
     SHOP = {
         "2": {"name": "专属称号", "price": 50000, "desc": "随机抽取一个称号"},
         "3": {"name": "运势查询", "price": 20000, "desc": "查看今日运势（文本）"},
@@ -58,6 +62,12 @@ class SignInSystem:
     def _save_user(self, user_id, data):
         with open(os.path.join(SIGNIN_DIR, f"user_{user_id}.json"), "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
+
+    def owns(self, text):
+        return (text in self.EXACT_COMMANDS or text.startswith(self.PREFIX_COMMANDS))
+
+    def handle(self, text, ctx):
+        return self.handle_command(text, ctx.user_id, ctx.username, ctx.group_id)
 
     def handle_command(self, text, user_id, username, group_id):
         """处理签到积分命令"""

@@ -21,6 +21,11 @@ _WEEKDAYS = ["周一", "周二", "周三", "周四", "周五", "周六", "周日
 class SpeechStats:
     """发言统计管理器"""
 
+    COMMANDS = ("注册", "我的发言", "发言日榜", "发言周榜", "发言月榜", "发言年榜")
+    PREFIX_COMMANDS = ("历史日榜", "历史周榜", "历史月榜", "历史年榜",
+                       "设置用户名", "查询发言")
+    EXTRA_COMMANDS = ("发言季榜", "赛季榜")
+
     # ==================== 基础读写 ====================
 
     def record_speech(self, group_id: str, user_id: str, username: str):
@@ -103,6 +108,13 @@ class SpeechStats:
         return self._agg_files(group_id, files)
 
     # ==================== 命令入口 ====================
+
+    def owns(self, text):
+        return (text in self.COMMANDS or text in self.EXTRA_COMMANDS
+                or text.startswith(self.PREFIX_COMMANDS))
+
+    def handle(self, text, ctx):
+        return self.handle_command(text, ctx.group_id, ctx.user_id)
 
     def handle_command(self, text, group_id, user_id):
         """处理发言统计命令；无法识别的命令返回 None"""

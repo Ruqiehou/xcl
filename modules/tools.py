@@ -10,12 +10,36 @@ from .utils import NumberToChinese, WeatherService, NewsService, IPQueryService
 class ToolCommands:
     """工具命令处理器"""
 
+    PREFIX_COMMANDS = ("查词", "粗查", "天气", "定位", "转写", "爬")
+    EXACT_COMMANDS = ("新闻",)
+
     def __init__(self, dictionary: dict):
         self.dictionary = dictionary
         self.weather = WeatherService()
         self.news = NewsService()
         self.ip_svc = IPQueryService()
         self.num2cn = NumberToChinese()
+
+    def owns(self, text):
+        return text in self.EXACT_COMMANDS or text.startswith(self.PREFIX_COMMANDS)
+
+    async def handle(self, text, ctx=None):
+        """工具命令分发；返回回复文本，未命中返回 None"""
+        if text.startswith("查词"):
+            return self.lookup(text[2:])
+        if text.startswith("粗查"):
+            return self.coarse_lookup(text[2:])
+        if text.startswith("天气"):
+            return await self.weather_cmd(text[2:])
+        if text == "新闻":
+            return await self.news_cmd()
+        if text.startswith("定位"):
+            return self.ip_cmd(text[2:])
+        if text.startswith("转写"):
+            return self.zhuanxie_cmd(text[2:])
+        if text.startswith("爬"):
+            return await self.search_cmd(text[1:])
+        return None
 
     def lookup(self, word):
         """查词"""

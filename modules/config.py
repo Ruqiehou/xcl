@@ -4,6 +4,7 @@
 import json
 import os
 import re
+from collections import namedtuple
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
@@ -47,3 +48,28 @@ ADMIN_IDS: set = _load_admin_ids(ADMIN_IDS_PATH)
 
 # botpy 消息中 @ 机器人的文本形式
 MENTION_PATTERN = re.compile(r"<@![0-9a-zA-Z_\-]+>")
+
+# 消息上下文：群 openid、用户 openid、展示用用户名。各功能模块统一接收。
+MsgCtx = namedtuple("MsgCtx", "group_id user_id username")
+
+# 机器人登录配置（config.yaml 位于项目根目录）
+BOT_CONFIG_PATH = os.path.join(BASE_DIR, "config.yaml")
+
+
+def load_json(path, default=None):
+    """读取 JSON 文件，失败返回 default（默认空 dict）"""
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+    except Exception:
+        return {} if default is None else default
+
+
+def load_bot_config(path=BOT_CONFIG_PATH):
+    """读取 config.yaml 中的 appid/secret。"""
+    import yaml
+
+    with open(path, "r", encoding="utf-8") as f:
+        cfg = yaml.safe_load(f)
+    return cfg["appid"], cfg["secret"]

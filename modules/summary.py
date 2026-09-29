@@ -71,6 +71,12 @@ class GroupSummary:
             return self._group_report(group_id, days)
         return None
 
+    def owns(self, text):
+        return text == "群总结帮助" or text.startswith("群总结")
+
+    def handle(self, text, ctx):
+        return self.handle_command(ctx.group_id, text)
+
     def _group_report(self, group_id, days):
         records = list(self._iter_records(group_id, days))
         period = "今日" if days == 1 else f"最近{days}天"
