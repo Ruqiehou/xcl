@@ -28,6 +28,10 @@ class SpeechStats:
 
     # ==================== 基础读写 ====================
 
+    def record(self, ctx, text: str = ""):
+        """统一发言记录接口（供 bot.py 注册表调用）"""
+        self.record_speech(ctx.group_id, ctx.user_id, ctx.username)
+
     def record_speech(self, group_id: str, user_id: str, username: str):
         """记录一次发言"""
         # 用户设置过自定义用户名时，以自定义名字为准

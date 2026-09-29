@@ -2,7 +2,7 @@
 """
 统一使用官方 qq-botpy SDK 收发消息，身份标识使用 openid（member_openid）。
 本文件只负责：连接事件、消息解析、发言记录、命令分发与回复。
-具体功能实现全部在 modules/ 下，新增功能只需在 COMMAND_HANDLERS 中注册。
+具体功能实现全部在 modules/ 下，新增功能只需在 command_handlers 中注册。
 """
 
 import asyncio
@@ -14,7 +14,7 @@ from botpy.message import GroupMessage, C2CMessage
 
 from modules import builtin
 from modules.config import (DICTIONARY_PATH, MENTION_PATTERN, MsgCtx,
-                            load_bot_config, load_json)
+                            load_bot_config, load_json, make_username)
 from modules.patches import apply_group_message_patch
 from modules.qna import AnswerManager
 from modules.summary import GroupSummary
@@ -49,6 +49,9 @@ class MyClient(botpy.Client):
             self.summary, self.signin, self.speech, self.qna, self.tools,
         ]
 
+        # 发言记录表：每条群消息依次交给这些模块的 record(ctx, text)
+        self.recorders = [self.summary, self.speech, self.signin]
+
     # ---------------- 回复 ----------------
     async def _reply(self, message, content: str):
         async with self._seq_lock:
@@ -80,7 +83,7 @@ class MyClient(botpy.Client):
         ctx = MsgCtx(
             group_id=str(getattr(message, "group_openid", "") or ""),
             user_id=user_id,
-            username="User_" + (user_id[-6:] if user_id else "unknown"),
+            username=make_username(user_id),
         )
 
         self._record_speech(ctx, text)
@@ -90,13 +93,12 @@ class MyClient(botpy.Client):
             await self._reply(message, reply)
 
     def _record_speech(self, ctx, text):
-        """所有模块各自记录发言"""
-        try:
-            self.summary.record_speech(ctx.group_id, ctx.user_id, ctx.username, text)
-            self.speech.record_speech(ctx.group_id, ctx.user_id, ctx.username)
-            self.signin.record_speech(ctx.user_id, ctx.username)
-        except Exception as e:
-            logger.warning(f"记录发言失败: {e}")
+        """把发言交给各记录模块"""
+        for recorder in self.recorders:
+            try:
+                recorder.record(ctx, text)
+            except Exception as e:
+                logger.warning(f"记录发言失败({type(recorder).__name__}): {e}")
 
     async def _dispatch(self, text, ctx):
         """返回要回复的文本；无回复返回 None"""
@@ -122,7 +124,7 @@ class MyClient(botpy.Client):
             return
         reply = builtin.handle_command(text)
         if reply is None:
-            reply = "私聊仅支持：ping、帮助、echo、运势。群功能请在群内@我使用。"
+            reply = builtin.C2C_FALLBACK
         await self._reply(message, reply)
 
 

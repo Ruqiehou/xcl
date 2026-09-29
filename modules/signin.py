@@ -31,6 +31,10 @@ class SignInSystem:
         self.dictionary = dictionary
         self.daily_fortune = daily_fortune_func
 
+    def record(self, ctx, text: str = ""):
+        """统一发言记录接口（供 bot.py 注册表调用）"""
+        self.record_speech(ctx.user_id, ctx.username)
+
     def record_speech(self, user_id: str, username: str):
         """记录发言（累计发言数和积分）"""
         sfile = os.path.join(SIGNIN_DIR, f"user_{user_id}.json")

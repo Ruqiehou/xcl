@@ -25,6 +25,9 @@ _FORTUNE_ADVICES = [
 _HELP_ALIASES = ("/help", "/帮助", "帮助", "指令", "指南")
 _FORTUNE_ALIASES = ("/运势", "/我的运势", "/今日运势", "运势", "今日运势", "我的运势")
 
+# 私聊收到不支持的消息时的兜底回复
+C2C_FALLBACK = "私聊仅支持：ping、帮助、echo、运势。群功能请在群内@我使用。"
+
 
 def daily_fortune():
     return (f"🔮 今日运势\n────────\n运势：{random.choice(_FORTUNE_LEVELS)}\n"

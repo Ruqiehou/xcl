@@ -49,6 +49,14 @@ ADMIN_IDS: set = _load_admin_ids(ADMIN_IDS_PATH)
 # botpy 消息中 @ 机器人的文本形式
 MENTION_PATTERN = re.compile(r"<@![0-9a-zA-Z_\-]+>")
 
+# 默认用户名前缀（用户未设置自定义名字时使用）
+USERNAME_PREFIX = "User_"
+
+
+def make_username(user_id: str) -> str:
+    """由 openid 生成默认展示名：User_ + 后6位"""
+    return USERNAME_PREFIX + (user_id[-6:] if user_id else "unknown")
+
 # 消息上下文：群 openid、用户 openid、展示用用户名。各功能模块统一接收。
 MsgCtx = namedtuple("MsgCtx", "group_id user_id username")
 

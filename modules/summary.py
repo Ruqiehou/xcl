@@ -19,6 +19,10 @@ class GroupSummary:
         "怎么", "为什么", "可以", "不是", "还是", "然后", "如果", "但是", "所以", "因为", "已经"
     }
 
+    def record(self, ctx, text: str = ""):
+        """统一发言记录接口（供 bot.py 注册表调用）"""
+        self.record_speech(ctx.group_id, ctx.user_id, ctx.username, text)
+
     def record_speech(self, group_id: str, user_id: str, username: str, text: str):
         """记录一条发言"""
         now = datetime.now()
