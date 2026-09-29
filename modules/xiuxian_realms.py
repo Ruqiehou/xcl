@@ -4,19 +4,17 @@
 import json
 import os
 
-# 模块所在目录：.../xcl/modules/xiuxian，境界配置随模块放置
+# 模块所在目录：.../xcl/modules，境界配置随模块放置
 MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 项目根目录：.../xcl（bot.py 所在目录）
-BASE_DIR = os.path.dirname(os.path.dirname(MODULE_DIR))
+BASE_DIR = os.path.dirname(MODULE_DIR)
 # 玩家数据目录：.../xcl/data/xiuxian，用户 ID 为 openid 字符串
 DEFAULT_DATA_DIR = os.path.join(BASE_DIR, "data", "xiuxian")
 
 
 def load_realms_from_json():
     """从JSON文件加载境界配置"""
-    # 使用模块目录路径
-    script_dir = MODULE_DIR
-    json_path = os.path.join(script_dir, "jingjie.json")
+    json_path = os.path.join(MODULE_DIR, "xiuxian_jingjie.json")
     if os.path.exists(json_path):
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)

@@ -5,8 +5,8 @@ import json
 import os
 import logging
 
-from .cultivator import Cultivator
-from .realms import DEFAULT_DATA_DIR
+from .xiuxian_cultivator import Cultivator
+from .xiuxian_realms import DEFAULT_DATA_DIR
 
 logger = logging.getLogger(__name__)
 

@@ -13,7 +13,7 @@ import logging
 import os
 import re
 
-from .storage import CultivationSystem
+from .xiuxian_storage import CultivationSystem
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ _MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # 插件配置，enabled 可整体开关修仙功能
 try:
-    with open(os.path.join(_MODULE_DIR, "config.json"), "r", encoding="utf-8") as _f:
+    with open(os.path.join(_MODULE_DIR, "xiuxian_config.json"), "r", encoding="utf-8") as _f:
         PLUGIN_CONFIG = json.load(_f)
 except (OSError, json.JSONDecodeError):
     PLUGIN_CONFIG = {}

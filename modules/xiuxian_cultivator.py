@@ -4,10 +4,10 @@
 import random
 from typing import Optional
 
-from .realms import (ASCENSION_LEVELS, REALM_NAMES, SUB_REALMS,
-                    SUB_REALM_THRESHOLDS)
-from .equipment import (EQUIPMENT_TYPES, WEARABLE_TYPES,
-                        generate_equipment, items_equal)
+from .xiuxian_realms import (ASCENSION_LEVELS, REALM_NAMES, SUB_REALMS,
+                             SUB_REALM_THRESHOLDS)
+from .xiuxian_equipment import (EQUIPMENT_TYPES, WEARABLE_TYPES,
+                                generate_equipment, items_equal)
 
 
 class Cultivator:
