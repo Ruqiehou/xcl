@@ -1,0 +1,18 @@
+{
+  "username": "道友",
+  "player_id": "openid_x",
+  "realm_index": 0,
+  "exp": 0,
+  "last_meditate": "",
+  "total_exp_gained": 0,
+  "total_breakthroughs": 0,
+  "items": [],
+  "is_soul_opened": false,
+  "is_ascended": false,
+  "ascension_count": 0,
+  "equipped": {
+    "weapon": null,
+    "armor": null,
+    "artifact": null
+  }
+}
